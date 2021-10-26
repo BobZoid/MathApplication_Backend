@@ -24,14 +24,14 @@ app.get("/teachers", (req, res) => {
     db.all(sql, params, (err, rows) => {
         res.json({
             "message": "Successfully imported users.",
-            "user": rows
+            "teachers": rows
         })
     });
 });
 
 app.post("/students", (req, res, next) => {
     let problems=[];
-    if(!req.body.user || !req.body.password){
+    if(!req.body.studentName || !req.body.studentPassword){
         problems.push("No user/password");
     }
     if (problems.length>0) {
@@ -39,12 +39,12 @@ app.post("/students", (req, res, next) => {
         return;
     }
     let data = {
-        user: req.body.user,
-        password: req.body.password
+        user: req.body.studentName,
+        password: req.body.studentPassword
     }
 
-    let sql = "INSERT INTO studentDB (user, password) VALUES (?,?)";
-    let parametrar = [data.user, data.password];
+    let sql = "INSERT INTO studentDB (studentName, studentPassword) VALUES (?,?)";
+    let parametrar = [data.studentName, data.studentPassword];
     db.run(sql, parametrar, function (err, result) {
         if (err) {
             res.status(400).json({"error": err.message});
@@ -87,7 +87,7 @@ app.get("/addition", (req, res) => {
         }
         res.json({
             "message": "Successfully imported database.",
-            "students": rows
+            "questions": rows
         })
     });
 });

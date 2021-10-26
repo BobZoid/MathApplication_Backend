@@ -18,7 +18,7 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
                 // Table already created
             }else{
                 // Table just created, creating some rows
-                let insert = 'INSERT INTO teacherDB (user, password) VALUES (?,?)'
+                let insert = 'INSERT INTO teacherDB (teacherName, teacherPassword) VALUES (?,?)'
                 db.run(insert, ["admin", "123"])
             }
         })
