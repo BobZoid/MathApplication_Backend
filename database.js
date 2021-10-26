@@ -11,9 +11,8 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
     }else{
         console.log('Connected to the SQlite database.')
         db.run(`CREATE TABLE teacherDB (
-            id INTEGER PRIMARY KEY,
-            user TEXT,
-            password TEXT
+            teacherName TEXT PRIMARY KEY,
+            teacherPassword TEXT
             )`,(err) => {
             if (err) {
                 // Table already created
@@ -24,9 +23,10 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
             }
         })
         db.run(`CREATE TABLE studentDB (
-            id INTEGER PRIMARY KEY,
-            user TEXT,
-            password TEXT
+            studentName TEXT PRIMARY KEY,
+            studentPassword TEXT,
+            studentScore INTEGER,
+            studentAge INTEGER
             )`,(err) => {
             if (err) {
                 // Table already created
