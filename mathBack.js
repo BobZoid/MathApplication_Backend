@@ -1,6 +1,7 @@
 var express = require("express")
 var app = express()
 var cors = require('cors')
+var db = require("./database.js")
 
 app.use(cors())
 app.use(express.static('public'))
@@ -15,15 +16,78 @@ app.listen(HTTP_PORT, () => {
     console.log("MathKnight Backend kör på port %PORT%".replace("%PORT%",HTTP_PORT))
 });
 
-app.get("/users", (req, res) => {
+app.get("/teachers", (req, res) => {
 
-    let sql = "select * from Users"
+    let sql = "select * from teacherDB"
     let params = []
 
     db.all(sql, params, (err, rows) => {
         res.json({
             "message": "Successfully imported users.",
             "user": rows
+        })
+    });
+});
+
+app.post("/students", (req, res, next) => {
+    let problems=[];
+    if(!req.body.user || !req.body.password){
+        problems.push("No user/password");
+    }
+    if (problems.length>0) {
+        res.status(400).json({"error": problems});
+        return;
+    }
+    let data = {
+        user: req.body.user,
+        password: req.body.password
+    }
+
+    let sql = "INSERT INTO studentDB (user, password) VALUES (?,?)";
+    let parametrar = [data.user, data.password];
+    db.run(sql, parametrar, function (err, result) {
+        if (err) {
+            res.status(400).json({"error": err.message});
+            return;
+        }
+        res.json({
+            "message": "success",
+            "user": data,
+            "id" : this.lastID
+        })
+    })
+})
+
+app.get("/students", (req, res) => {
+
+    let sql = "select * from studentDB"
+    let params = []
+
+    db.all(sql, params, (err, rows) => {
+        if (err) {
+            res.status(400).json({"error": err.message});
+            return;
+        }
+        res.json({
+            "message": "Successfully imported database.",
+            "students": rows
+        })
+    });
+});
+
+app.get("/addition", (req, res) => {
+
+    let sql = "select * from additionDB"
+    let params = []
+
+    db.all(sql, params, (err, rows) => {
+        if (err) {
+            res.status(400).json({"error": err.message});
+            return;
+        }
+        res.json({
+            "message": "Successfully imported database.",
+            "students": rows
         })
     });
 });
