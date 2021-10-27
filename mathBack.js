@@ -44,7 +44,7 @@ app.post("/students", (req, res, next) => {
         studentAge: req.body.studentAge
     }
 
-    let sql = "INSERT INTO studentDB (studentName, studentPassword, studentAge) VALUES (?,?,?)";
+    let sql = "INSERT INTO studentDB (studentName, studentPassword, studentAge, studentScore) VALUES (?,?,?,0)";
     let parametrar = [data.studentName, data.studentPassword, data.studentAge];
     db.run(sql, parametrar, function (err, result) {
         if (err) {
@@ -75,6 +75,26 @@ app.get("/students", (req, res) => {
         })
     });
 });
+
+//increase points
+app.put("/students", (req, res, next) => {
+    let data = {
+        studentName: req.body.studentName
+    }
+    let sql ='UPDATE studentDB SET studentScore = studentScore + 1 WHERE studentName = ?'
+    let params =[data.studentName]
+    db.run(sql, params, function (err, result) {
+        if (err){
+            res.status(400).json({"error": err.message})
+            return;
+        }
+        res.json({
+            "message": "success",
+            "bok": data,
+            "id" : this.lastID
+        })
+    });
+})
 
 app.get("/addition", (req, res) => {
 
