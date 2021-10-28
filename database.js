@@ -17,7 +17,6 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
             if (err) {
                 // Table already created
             }else{
-                // Table just created, creating some rows
                 let insert = 'INSERT INTO teacherDB (teacherName, teacherPassword) VALUES (?,?)'
                 db.run(insert, ["admin", "123"])
             }
@@ -40,7 +39,6 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
             if (err) {
                 // Table already created
             }else{
-                // Table just created, creating some rows
                 let insert = 'INSERT INTO additionDB (question, answer) VALUES (?,?)'
                 db.run(insert, ["1+1", 2])
                 db.run(insert, ["2+1", 3])
@@ -72,7 +70,6 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
             if (err) {
                 // Table already created
             }else{
-                // Table just created, creating some rows
                 let insert = 'INSERT INTO subtractionDB (question, answer) VALUES (?,?)'
                 db.run(insert, ["2-1", 1])
                 db.run(insert, ["8-6", 2])

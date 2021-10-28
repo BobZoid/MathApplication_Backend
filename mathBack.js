@@ -96,6 +96,41 @@ app.put("/students", (req, res, next) => {
     });
 })
 
+//reset score
+app.put("/students/reset", (req, res, next) => {
+    let data = {
+        studentName: req.body.studentName
+    }
+    let sql ='UPDATE studentDB SET studentScore = 0 WHERE studentName = ?'
+    let params =[data.studentName]
+    db.run(sql, params, function (err, result) {
+        if (err){
+            res.status(400).json({"error": err.message})
+            return;
+        }
+        res.json({
+            "message": "success",
+            "bok": data,
+            "id" : this.lastID
+        })
+    });
+})
+
+app.delete("/students", (req, res, next) => {
+    let data = {
+        studentName: req.body.studentName
+    }
+    let sql = "DELETE FROM studentDB WHERE studentName = ?";
+    let params = data.studentName;
+    db.run(sql, params, function (err, result) {
+        if (err){
+            res.status(400).json({"error": res.message})
+            return;
+        }
+        res.json({"message":"deleted", rows: this.changes})
+    })
+})
+
 app.get("/addition", (req, res) => {
 
     let sql = "select * from additionDB"
