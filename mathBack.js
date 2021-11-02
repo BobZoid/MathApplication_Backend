@@ -1,7 +1,7 @@
-var express = require("express")
-var app = express()
-var cors = require('cors')
-var db = require("./database.js")
+let express = require("express")
+let app = express()
+let cors = require('cors')
+let db = require("./database.js")
 
 app.use(cors())
 app.use(express.static('public'))
@@ -29,7 +29,7 @@ app.get("/teachers", (req, res) => {
     });
 });
 
-app.post("/students", (req, res, next) => {
+app.post("/students", (req, res) => {
     let problems=[];
     if(!req.body.studentName || !req.body.studentPassword || !req.body.studentAge){
         problems.push("Invalid data");
@@ -46,7 +46,7 @@ app.post("/students", (req, res, next) => {
 
     let sql = "INSERT INTO studentDB (studentName, studentPassword, studentAge, studentScore) VALUES (?,?,?,0)";
     let parametrar = [data.studentName, data.studentPassword, data.studentAge];
-    db.run(sql, parametrar, function (err, result) {
+    db.run(sql, parametrar, function (err) {
         if (err) {
             res.status(400).json({"error": err.message});
             return;
@@ -77,13 +77,13 @@ app.get("/students", (req, res) => {
 });
 
 //increase points
-app.put("/students", (req, res, next) => {
+app.put("/students", (req, res) => {
     let data = {
         studentName: req.body.studentName
     }
     let sql ='UPDATE studentDB SET studentScore = studentScore + 1 WHERE studentName = ?'
     let params =[data.studentName]
-    db.run(sql, params, function (err, result) {
+    db.run(sql, params, function (err) {
         if (err){
             res.status(400).json({"error": err.message})
             return;
@@ -97,13 +97,13 @@ app.put("/students", (req, res, next) => {
 })
 
 //reset score
-app.put("/students/reset", (req, res, next) => {
+app.put("/students/reset", (req, res) => {
     let data = {
         studentName: req.body.studentName
     }
     let sql ='UPDATE studentDB SET studentScore = 0 WHERE studentName = ?'
     let params =[data.studentName]
-    db.run(sql, params, function (err, result) {
+    db.run(sql, params, function (err) {
         if (err){
             res.status(400).json({"error": err.message})
             return;
@@ -116,13 +116,13 @@ app.put("/students/reset", (req, res, next) => {
     });
 })
 
-app.delete("/students", (req, res, next) => {
+app.delete("/students", (req, res) => {
     let data = {
         studentName: req.body.studentName
     }
     let sql = "DELETE FROM studentDB WHERE studentName = ?";
     let params = data.studentName;
-    db.run(sql, params, function (err, result) {
+    db.run(sql, params, function (err) {
         if (err){
             res.status(400).json({"error": res.message})
             return;
