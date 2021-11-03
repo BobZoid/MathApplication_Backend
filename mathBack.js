@@ -6,14 +6,14 @@ let db = require("./database.js")
 app.use(cors())
 app.use(express.static('public'))
 
-var bodyParser = require("body-parser")
-app.use(bodyParser.urlencoded({ extended: false }))
+let bodyParser = require("body-parser")
+app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
-var HTTP_PORT = 3030
+let HTTP_PORT = 3030
 
 app.listen(HTTP_PORT, () => {
-    console.log("MathKnight Backend kör på port %PORT%".replace("%PORT%",HTTP_PORT))
+    console.log("MathKnight Backend kör på port %PORT%".replace("%PORT%", HTTP_PORT))
 });
 
 app.get("/teachers", (req, res) => {
@@ -30,11 +30,11 @@ app.get("/teachers", (req, res) => {
 });
 
 app.post("/students", (req, res) => {
-    let problems=[];
-    if(!req.body.studentName || !req.body.studentPassword || !req.body.studentAge){
+    let problems = [];
+    if (!req.body.studentName || !req.body.studentPassword || !req.body.studentAge) {
         problems.push("Invalid data");
     }
-    if (problems.length>0) {
+    if (problems.length > 0) {
         res.status(400).json({"error": problems});
         return;
     }
@@ -54,7 +54,7 @@ app.post("/students", (req, res) => {
         res.json({
             "message": "success",
             "user": data,
-            "id" : this.lastID
+            "id": this.lastID
         })
     })
 })
@@ -79,19 +79,20 @@ app.get("/students", (req, res) => {
 //increase points
 app.put("/students", (req, res) => {
     let data = {
-        studentName: req.body.studentName
+        studentName: req.body.studentName,
+        acquiredPoints: req.body.studentScore
     }
-    let sql ='UPDATE studentDB SET studentScore = studentScore + 1 WHERE studentName = ?'
-    let params =[data.studentName]
+    let sql = 'UPDATE studentDB SET studentScore = studentScore+? WHERE studentName = ?'
+    let params = [data.acquiredPoints,data.studentName]
     db.run(sql, params, function (err) {
-        if (err){
+        if (err) {
             res.status(400).json({"error": err.message})
             return;
         }
         res.json({
             "message": "success",
             "bok": data,
-            "id" : this.lastID
+            "id": this.lastID
         })
     });
 })
@@ -101,17 +102,17 @@ app.put("/students/reset", (req, res) => {
     let data = {
         studentName: req.body.studentName
     }
-    let sql ='UPDATE studentDB SET studentScore = 0 WHERE studentName = ?'
-    let params =[data.studentName]
+    let sql = 'UPDATE studentDB SET studentScore = 0 WHERE studentName = ?'
+    let params = [data.studentName]
     db.run(sql, params, function (err) {
-        if (err){
+        if (err) {
             res.status(400).json({"error": err.message})
             return;
         }
         res.json({
             "message": "success",
             "bok": data,
-            "id" : this.lastID
+            "id": this.lastID
         })
     });
 })
@@ -123,11 +124,11 @@ app.delete("/students", (req, res) => {
     let sql = "DELETE FROM studentDB WHERE studentName = ?";
     let params = data.studentName;
     db.run(sql, params, function (err) {
-        if (err){
+        if (err) {
             res.status(400).json({"error": res.message})
             return;
         }
-        res.json({"message":"deleted", rows: this.changes})
+        res.json({"message": "deleted", rows: this.changes})
     })
 })
 
