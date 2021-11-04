@@ -165,3 +165,37 @@ app.get("/subtraction", (req, res) => {
         })
     });
 });
+
+app.get("/division", (req, res) => {
+
+    let sql = "select * from divisionDB"
+    let params = []
+
+    db.all(sql, params, (err, rows) => {
+        if (err) {
+            res.status(400).json({"error": err.message});
+            return;
+        }
+        res.json({
+            "message": "Successfully imported database.",
+            "questions": rows
+        })
+    });
+});
+
+app.get("/multiplication", (req, res) => {
+
+    let sql = "select * from multiplicationDB"
+    let params = []
+
+    db.all(sql, params, (err, rows) => {
+        if (err) {
+            res.status(400).json({"error": err.message});
+            return;
+        }
+        res.json({
+            "message": "Successfully imported database.",
+            "questions": rows
+        })
+    });
+});
