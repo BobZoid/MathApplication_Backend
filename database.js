@@ -25,6 +25,8 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
             studentName TEXT PRIMARY KEY,
             studentPassword TEXT,
             studentScore INTEGER,
+            studentAnsQ INTEGER,
+            studentWrongAns INTEGER,
             studentAge INTEGER
             )`,(err) => {
             if (err) {

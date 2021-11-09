@@ -44,7 +44,7 @@ app.post("/students", (req, res) => {
         studentAge: req.body.studentAge
     }
 
-    let sql = "INSERT INTO studentDB (studentName, studentPassword, studentAge, studentScore) VALUES (?,?,?,0)";
+    let sql = "INSERT INTO studentDB (studentName, studentPassword, studentAge, studentScore, studentWrongAns, studentAnsQ) VALUES (?,?,?,0,0,0)";
     let parametrar = [data.studentName, data.studentPassword, data.studentAge];
     db.run(sql, parametrar, function (err) {
         if (err) {
@@ -84,6 +84,46 @@ app.put("/students", (req, res) => {
     }
     let sql = 'UPDATE studentDB SET studentScore = studentScore+? WHERE studentName = ?'
     let params = [data.acquiredPoints,data.studentName]
+    db.run(sql, params, function (err) {
+        if (err) {
+            res.status(400).json({"error": err.message})
+            return;
+        }
+        res.json({
+            "message": "success",
+            "bok": data,
+            "id": this.lastID
+        })
+    });
+})
+
+app.put("/students/achi", (req, res) => {
+    let data = {
+        studentName: req.body.studentName,
+        acquiredAnswers: req.body.studentAnsQ
+    }
+    let sql = 'UPDATE studentDB SET studentAnsQ = studentAnsQ+? WHERE studentName = ?'
+    let params = [data.acquiredAnswers,data.studentName]
+    db.run(sql, params, function (err) {
+        if (err) {
+            res.status(400).json({"error": err.message})
+            return;
+        }
+        res.json({
+            "message": "success",
+            "bok": data,
+            "id": this.lastID
+        })
+    });
+})
+
+app.put("/students/wrong", (req, res) => {
+    let data = {
+        studentName: req.body.studentName,
+        acquiredWrongs: req.body.studentWrongAns
+    }
+    let sql = 'UPDATE studentDB SET studentWrongAns = studentWrongAns+? WHERE studentName = ?'
+    let params = [data.acquiredWrongs,data.studentName]
     db.run(sql, params, function (err) {
         if (err) {
             res.status(400).json({"error": err.message})
