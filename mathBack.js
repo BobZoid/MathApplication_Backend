@@ -142,7 +142,7 @@ app.put("/students/reset", (req, res) => {
     let data = {
         studentName: req.body.studentName
     }
-    let sql = 'UPDATE studentDB SET studentScore = 0 WHERE studentName = ?'
+    let sql = 'UPDATE studentDB SET studentScore = 0, studentAnsQ = 0, studentWrongAns = 0 WHERE studentName = ?'
     let params = [data.studentName]
     db.run(sql, params, function (err) {
         if (err) {
