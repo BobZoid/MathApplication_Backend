@@ -27,7 +27,8 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
             studentScore INTEGER,
             studentAnsQ INTEGER,
             studentWrongAns INTEGER,
-            studentAge INTEGER
+            studentAge INTEGER,
+            studentAchiPoints INTEGER
             )`,(err) => {
             if (err) {
                 // Table already created
